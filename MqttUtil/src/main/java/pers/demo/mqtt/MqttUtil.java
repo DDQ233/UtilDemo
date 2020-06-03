@@ -38,10 +38,22 @@ public class MqttUtil {
     // 会话超时时间
     private int keepAliveIntervalTime = 20;
 
+    /**
+     * 无参构造函数
+     */
     public MqttUtil() {
 
     }
 
+    /**
+     * 有参构造函数
+     *
+     * @param host
+     * @param port
+     * @param clientId
+     * @param username
+     * @param password
+     */
     public MqttUtil(@NotNull String host, @NotNull int port, @NotNull String clientId, @NotNull String username, @NotNull String password) {
         this.host = host;
         this.port = port;
@@ -51,6 +63,15 @@ public class MqttUtil {
         this.url = "tcp://" + host + ":" + port;
     }
 
+    /**
+     * 绑定连接 MQTT 服务器的参数
+     *
+     * @param host
+     * @param port
+     * @param clientId
+     * @param username
+     * @param password
+     */
     public void bindOptions(@NotNull String host, int port, @NotNull String clientId, @NotNull String username, @NotNull String password) {
         this.host = host;
         this.port = port;
@@ -96,6 +117,11 @@ public class MqttUtil {
         this.keepAliveIntervalTime = keepAliveIntervalTime;
     }
 
+    /**
+     * 连接 MQTT 服务器
+     *
+     * @throws MqttException
+     */
     public void connect() throws MqttException {
         if (checkOptions()) {
             if (mqttClient == null) {
@@ -111,6 +137,11 @@ public class MqttUtil {
         }
     }
 
+    /**
+     * 断开连接
+     *
+     * @throws MqttException
+     */
     public void disconnect() throws MqttException {
         if (mqttClient != null) {
             mqttClient.disconnect();
@@ -118,22 +149,44 @@ public class MqttUtil {
         }
     }
 
+    /**
+     * 根据已绑定的参数重新连接
+     *
+     * @throws MqttException
+     */
     public void reconnect() throws MqttException {
         disconnect();
         connect();
     }
 
+    /**
+     * 设置消息处理回调函数
+     *
+     * @param mqttCallback
+     */
     public void setPushCallback(MqttCallback mqttCallback) {
         if (mqttClient != null) {
             mqttClient.setCallback(mqttCallback);
         }
     }
 
+    /**
+     * 订阅主题
+     *
+     * @param topic
+     * @param qos
+     * @throws MqttException
+     */
     public void subscribeTopic(String[] topic, int[] qos) throws MqttException {
         mqttClient.subscribe(topic, qos);
     }
 
 
+    /**
+     * 参数检查
+     *
+     * @return
+     */
     public boolean checkOptions() {
         this.url = "tcp://" + host + ":" + port;
         return clientId != null && username != null && password != null;
