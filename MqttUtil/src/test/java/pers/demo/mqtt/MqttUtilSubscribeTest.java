@@ -7,7 +7,7 @@ import org.eclipse.paho.client.mqttv3.MqttException;
  * @Author DDQ
  * @Date 2020/6/3 13:37
  */
-public class MqttUtilTest {
+public class MqttUtilSubscribeTest {
 
     public static void main(String[] args) throws MqttException {
         String host = "mq.tongxinmao.com";

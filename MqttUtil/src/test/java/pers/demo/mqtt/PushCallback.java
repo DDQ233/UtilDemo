@@ -37,10 +37,12 @@ public class PushCallback implements MqttCallback {
      * @throws Exception
      */
     public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
+        System.out.println("\n");
         System.out.println("> Topic ---> " + topic);
         System.out.println("> Qos ---> " + mqttMessage.getQos());
         System.out.println("> Message ---> " + new String(mqttMessage.getPayload()));
         System.out.println("\n");
+        System.out.println();
     }
 
     /**
@@ -49,6 +51,6 @@ public class PushCallback implements MqttCallback {
      * @param iMqttDeliveryToken
      */
     public void deliveryComplete(IMqttDeliveryToken iMqttDeliveryToken) {
-        System.out.println("> Delivery complete ---------- " + iMqttDeliveryToken.isComplete());
+        System.out.println("> Delivery complete ----------> " + iMqttDeliveryToken.isComplete());
     }
 }
