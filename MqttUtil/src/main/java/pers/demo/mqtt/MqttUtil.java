@@ -209,7 +209,7 @@ public class MqttUtil {
      *
      * @param topic
      */
-    public void setReleaseTopic(String topic) {
+    public void setPublishTopic(String topic) {
         if (mqttClient != null) {
             mqttTopic = mqttClient.getTopic(topic);
             System.out.println("> √ Release Topic : " + topic);
@@ -223,7 +223,7 @@ public class MqttUtil {
      * @param qos
      * @param isRetained
      */
-    public void setReleaseMessage(String msg, int qos, boolean isRetained) {
+    public void setPublishMessage(String msg, int qos, boolean isRetained) {
         if (mqttClient != null && mqttTopic != null) {
             mqttMessage = new MqttMessage();
             mqttMessage.setQos(qos);
