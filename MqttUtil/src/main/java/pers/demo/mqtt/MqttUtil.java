@@ -54,7 +54,7 @@ public class MqttUtil {
      * @param username
      * @param password
      */
-    public MqttUtil(@NotNull String host, @NotNull int port, @NotNull String clientId, @NotNull String username, @NotNull String password) {
+    public MqttUtil(@NotNull String host, int port, @NotNull String clientId, @NotNull String username, @NotNull String password) {
         this.host = host;
         this.port = port;
         this.clientId = clientId;
@@ -171,7 +171,18 @@ public class MqttUtil {
     }
 
     /**
-     * 订阅主题
+     * 订阅单个主题
+     *
+     * @param topic
+     * @param qos
+     * @throws MqttException
+     */
+    public void subscribeTopic(String topic, int qos) throws MqttException {
+        mqttClient.subscribe(topic, qos);
+    }
+
+    /**
+     * 订阅多个主题
      *
      * @param topic
      * @param qos
