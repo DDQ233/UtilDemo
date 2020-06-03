@@ -1,10 +1,7 @@
 package pers.demo.mqtt;
 
 import com.sun.istack.internal.NotNull;
-import org.eclipse.paho.client.mqttv3.MqttCallback;
-import org.eclipse.paho.client.mqttv3.MqttClient;
-import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
-import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 /**
@@ -16,7 +13,13 @@ public class MqttUtil {
     // MQTT Client
     private MqttClient mqttClient;
     // 连接 MQTT 服务器需要的设置
-    private MqttConnectOptions mqttConnectOptions;
+    // private MqttConnectOptions mqttConnectOptions;
+    // 主题
+    private MqttTopic mqttTopic;
+    // MQTT 消息
+    private MqttMessage mqttMessage;
+    // MQTT 消息发送
+    private MqttDeliveryToken mqttDeliveryToken;
     // 连接 MQTT 服务器的 URL
     private String url;
     // MQTT 服务器地址
@@ -126,12 +129,15 @@ public class MqttUtil {
         if (checkOptions()) {
             if (mqttClient == null) {
                 mqttClient = new MqttClient(url, clientId, new MemoryPersistence());
+                MqttConnectOptions mqttConnectOptions = new MqttConnectOptions();
+                // 设置参数
                 mqttConnectOptions.setCleanSession(isCleanSession);
                 mqttConnectOptions.setUserName(username);
                 mqttConnectOptions.setPassword(password.toCharArray());
                 mqttConnectOptions.setConnectionTimeout(connectionTimeout);
                 mqttConnectOptions.setKeepAliveInterval(keepAliveIntervalTime);
                 mqttConnectOptions.setAutomaticReconnect(isAutomaticReconnect);
+                // 连接
                 mqttClient.connect(mqttConnectOptions);
             }
         }
@@ -192,6 +198,45 @@ public class MqttUtil {
         mqttClient.subscribe(topic, qos);
     }
 
+    /**
+     * 设置发布主题
+     *
+     * @param topic
+     */
+    public void setReleaseTopic(String topic) {
+        if (mqttClient != null) {
+            mqttTopic = mqttClient.getTopic(topic);
+        }
+    }
+
+    /**
+     * 设置发布消息
+     *
+     * @param msg
+     * @param qos
+     * @param isRetained
+     */
+    public void setReleaseMessage(String msg, int qos, boolean isRetained) {
+        if (mqttClient != null && mqttTopic != null) {
+            mqttMessage = new MqttMessage();
+            mqttMessage.setQos(qos);
+            mqttMessage.setRetained(isRetained);
+            mqttMessage.setPayload(msg.getBytes());
+        }
+    }
+
+    /**
+     * 发布消息
+     *
+     * @throws MqttException
+     */
+    public void publish() throws MqttException {
+        if (mqttClient != null && mqttTopic != null) {
+            mqttDeliveryToken = mqttTopic.publish(mqttMessage);
+            mqttDeliveryToken.waitForCompletion();
+            System.out.println("Message id published --- " + mqttDeliveryToken.isComplete());
+        }
+    }
 
     /**
      * 参数检查
