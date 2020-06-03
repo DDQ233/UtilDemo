@@ -37,9 +37,9 @@ public class PushCallback implements MqttCallback {
      * @throws Exception
      */
     public void messageArrived(String topic, MqttMessage mqttMessage) throws Exception {
-        System.out.println("> Topic : " + topic);
-        System.out.println("> Qos : " + mqttMessage.getQos());
-        System.out.println("> Message : " + new String(mqttMessage.getPayload()));
+        System.out.println("> Topic ---> " + topic);
+        System.out.println("> Qos ---> " + mqttMessage.getQos());
+        System.out.println("> Message ---> " + new String(mqttMessage.getPayload()));
         System.out.println("\n");
     }
 

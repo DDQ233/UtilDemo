@@ -139,6 +139,7 @@ public class MqttUtil {
                 mqttConnectOptions.setAutomaticReconnect(isAutomaticReconnect);
                 // 连接
                 mqttClient.connect(mqttConnectOptions);
+                System.out.println("> √ Connected");
             }
         }
     }
@@ -152,6 +153,7 @@ public class MqttUtil {
         if (mqttClient != null) {
             mqttClient.disconnect();
             mqttClient.close();
+            System.out.println("> √ Disconnected");
         }
     }
 
@@ -161,6 +163,7 @@ public class MqttUtil {
      * @throws MqttException
      */
     public void reconnect() throws MqttException {
+        System.out.println("> Reconnecting.......\n");
         disconnect();
         connect();
     }
@@ -173,6 +176,7 @@ public class MqttUtil {
     public void setPushCallback(MqttCallback mqttCallback) {
         if (mqttClient != null) {
             mqttClient.setCallback(mqttCallback);
+            System.out.println("> √ Set push callback");
         }
     }
 
@@ -185,6 +189,7 @@ public class MqttUtil {
      */
     public void subscribeTopic(String topic, int qos) throws MqttException {
         mqttClient.subscribe(topic, qos);
+        System.out.println("> √ Topic : " + topic);
     }
 
     /**
@@ -196,6 +201,7 @@ public class MqttUtil {
      */
     public void subscribeTopic(String[] topic, int[] qos) throws MqttException {
         mqttClient.subscribe(topic, qos);
+        System.out.println("> √ Subscribe Topic : " + topic);
     }
 
     /**
@@ -206,6 +212,7 @@ public class MqttUtil {
     public void setReleaseTopic(String topic) {
         if (mqttClient != null) {
             mqttTopic = mqttClient.getTopic(topic);
+            System.out.println("> √ Release Topic : " + topic);
         }
     }
 
@@ -222,6 +229,7 @@ public class MqttUtil {
             mqttMessage.setQos(qos);
             mqttMessage.setRetained(isRetained);
             mqttMessage.setPayload(msg.getBytes());
+            System.out.println("> √ Set release message.");
         }
     }
 
@@ -234,7 +242,7 @@ public class MqttUtil {
         if (mqttClient != null && mqttTopic != null) {
             mqttDeliveryToken = mqttTopic.publish(mqttMessage);
             mqttDeliveryToken.waitForCompletion();
-            System.out.println("Message id published --- " + mqttDeliveryToken.isComplete());
+            System.out.println("> √ Message id published --- " + mqttDeliveryToken.isComplete());
         }
     }
 
