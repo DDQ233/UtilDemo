@@ -3,6 +3,7 @@ package pers.demo.mqtt;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
+import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
 /**
  * @Description MqttUtil
@@ -14,10 +15,12 @@ public class MqttUtil {
     private MqttClient mqttClient;
     // 连接 MQTT 服务器需要的设置
     private MqttConnectOptions mqttConnectOptions;
+    // 连接 MQTT 服务器的 URL
+    private String url;
     // MQTT 服务器地址
     private String host;
     // MQTT 服务器端口
-    private String port;
+    private int port;
     // 客户端标识 ID
     private String clientId;
     // 连接 MQTT 服务器的用户名
@@ -29,7 +32,7 @@ public class MqttUtil {
 
     }
 
-    public MqttUtil(String host, String port, String clientId, String username, String password) {
+    public MqttUtil(String host, int port, String clientId, String username, String password) {
         this.host = host;
         this.port = port;
         this.clientId = clientId;
@@ -37,7 +40,7 @@ public class MqttUtil {
         this.password = password;
     }
 
-    public void bindOptions(String host, String port, String clientId, String username, String password) {
+    public void bindOptions(String host, int port, String clientId, String username, String password) {
         this.host = host;
         this.port = port;
         this.clientId = clientId;
@@ -46,11 +49,14 @@ public class MqttUtil {
     }
 
     public void connect() throws MqttException {
+        if (mqttClient == null) {
+            mqttClient = new MqttClient(url, clientId, new MemoryPersistence());
 
+        }
     }
 
     public boolean checkOptions() {
-        if (host != null && port != null && clientId != null && username != null && password != null) {
+        if (url != null && clientId != null && username != null && password != null) {
             return true;
         } else {
             return false;
