@@ -212,7 +212,7 @@ public class MqttUtil {
     public void setPublishTopic(String topic) {
         if (mqttClient != null) {
             mqttTopic = mqttClient.getTopic(topic);
-            System.out.println("> √ Release Topic : " + topic);
+            System.out.println("> √ Publish topic : " + topic);
         }
     }
 
@@ -229,7 +229,7 @@ public class MqttUtil {
             mqttMessage.setQos(qos);
             mqttMessage.setRetained(isRetained);
             mqttMessage.setPayload(msg.getBytes());
-            System.out.println("> √ Set release message.");
+            System.out.println("> √ Set publish message.");
         }
     }
 

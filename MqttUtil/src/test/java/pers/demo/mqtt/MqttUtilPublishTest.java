@@ -23,8 +23,9 @@ public class MqttUtilPublishTest {
         mqttUtil.setPushCallback(new PushCallback());
         mqttUtil.setPublishTopic(topic);
         mqttUtil.setPublishMessage("Message Message Message Message", qos, true);
+        mqttUtil.publish();
         mqttUtil.setPublishMessage("Message \n Message \n Message \n Message", qos, true);
-
+        mqttUtil.publish();
         mqttUtil.disconnect();
     }
 }
