@@ -1,5 +1,6 @@
 package pers.demo.serialport;
 
+import com.sun.istack.internal.NotNull;
 import gnu.io.CommPortIdentifier;
 import gnu.io.NoSuchPortException;
 import gnu.io.PortInUseException;
@@ -22,16 +23,105 @@ import java.util.TooManyListenersException;
  * @Date 2020/6/1 18:09
  */
 public class SerialPortUtil implements SerialPortEventListener {
+    // 用户操作
     private Operation operation;
+    // 串行端口
     private SerialPort serialPort;
+    // 端口 ID
     private CommPortIdentifier portIdentifier;
+    // 端口列表
     private List<String> portList = new ArrayList<String>();
+    // 数据输出流
     private OutputStream outputStream;
+    // 数据输入流
     private InputStream inputStream;
+    // 发送的数据量
     private int sendCount = 0;
 
+    private String portName = "COM1";
+    private int baudRate = 115200;
+    private int dataBits = SerialPort.DATABITS_8;
+    private int stopBits = SerialPort.STOPBITS_1;
+    private int parityBits = SerialPort.PARITY_NONE;
+    private int flowControl = SerialPort.FLOWCONTROL_NONE;
+
+    public void setPortName(String portName) {
+        this.portName = portName;
+    }
+
+    public void setBaudRate(int baudRate) {
+        this.baudRate = baudRate;
+    }
+
+    public void setDataBits(int dataBits) {
+        this.dataBits = dataBits;
+    }
+
+    public void setStopBits(int stopBits) {
+        this.stopBits = stopBits;
+    }
+
+    public void setParityBits(int parityBits) {
+        this.parityBits = parityBits;
+    }
+
+    public void setFlowControl(int flowControl) {
+        this.flowControl = flowControl;
+    }
+
+
+    /**
+     * 无参构造函数
+     */
+    public SerialPortUtil() {
+
+    }
+
+    /**
+     * 构造的同时添加串口接收到数据后的用户自定义操作
+     *
+     * @param operation
+     */
     public SerialPortUtil(Operation operation) {
         this.operation = operation;
+    }
+
+    /**
+     * 构造的同时完成所有参数的绑定
+     * @param operation
+     * @param portName
+     * @param baudRate
+     * @param dataBits
+     * @param stopBits
+     * @param parityBits
+     * @param flowControl
+     */
+    public SerialPortUtil(Operation operation, @NotNull String portName, int baudRate, int dataBits, int stopBits, int parityBits, int flowControl){
+        this.operation = operation;
+        this.portName = portName;
+        this.baudRate = baudRate;
+        this.dataBits = dataBits;
+        this.stopBits = stopBits;
+        this.parityBits = parityBits;
+        this.flowControl = flowControl;
+    }
+
+    /**
+     * 绑定连接串口的参数
+     *
+     * @param portName
+     * @param baudRate
+     * @param dataBits
+     * @param stopBits
+     * @param parityBits
+     */
+    public void bindOptions(@NotNull String portName, int baudRate, int dataBits, int stopBits, int parityBits, int flowControl) {
+        this.portName = portName;
+        this.baudRate = baudRate;
+        this.dataBits = dataBits;
+        this.stopBits = stopBits;
+        this.parityBits = parityBits;
+        this.flowControl = flowControl;
     }
 
     /**
@@ -61,14 +151,9 @@ public class SerialPortUtil implements SerialPortEventListener {
     /**
      * 打开串行端口
      *
-     * @param portName   串口名称
-     * @param baudRate   波特率
-     * @param dataBits   数据位
-     * @param stopBits   停止位
-     * @param parityBits 奇偶检验位
      * @return
      */
-    public boolean openSerialPort(String portName, int baudRate, int dataBits, int stopBits, int parityBits) {
+    public boolean openSerialPort() {
         // 获取要打开的端口
         try {
             portIdentifier = CommPortIdentifier.getPortIdentifier(portName);
