@@ -11,5 +11,12 @@
 
     <artifactId>SerialPortUtil</artifactId>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.bidib.jbidib.org.qbang.rxtx</groupId>
+            <artifactId>rxtxcomm</artifactId>
+            <version>2.2</version>
+        </dependency>
+    </dependencies>
 
 </project>
