@@ -37,12 +37,16 @@ public class SerialPortUtil implements SerialPortEventListener {
     private InputStream inputStream;
     // 发送的数据量
     private int sendCount = 0;
-
     private String portName = "COM1";
+    // 波特率
     private int baudRate = 115200;
+    // 数据位
     private int dataBits = SerialPort.DATABITS_8;
+    // 停止位
     private int stopBits = SerialPort.STOPBITS_1;
+    // 奇偶校验位
     private int parityBits = SerialPort.PARITY_NONE;
+    // 流控
     private int flowControl = SerialPort.FLOWCONTROL_NONE;
 
     public void setPortName(String portName) {
