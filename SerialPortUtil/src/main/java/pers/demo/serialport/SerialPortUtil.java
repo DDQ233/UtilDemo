@@ -50,6 +50,10 @@ public class SerialPortUtil implements SerialPortEventListener {
     // 流控
     private int flowControl = SerialPort.FLOWCONTROL_NONE;
 
+    public void setOperation(Operation operation) {
+        this.operation = operation;
+    }
+
     public void setPortName(String portName) {
         this.portName = portName;
     }
@@ -74,6 +78,22 @@ public class SerialPortUtil implements SerialPortEventListener {
         this.flowControl = flowControl;
     }
 
+    /**
+     * 获取已发送数据量
+     *
+     * @return
+     */
+    public int getSendCount() {
+        return sendCount;
+    }
+
+    /**
+     * 获取端口列表
+     * @return
+     */
+    public List<String> getPortList() {
+        return portList;
+    }
 
     /**
      * 无参构造函数
@@ -120,7 +140,8 @@ public class SerialPortUtil implements SerialPortEventListener {
      * @param stopBits
      * @param parityBits
      */
-    public void bindOptions(@NotNull String portName, int baudRate, int dataBits, int stopBits, int parityBits, int flowControl) {
+    public void bindOptions(Operation operation, @NotNull String portName, int baudRate, int dataBits, int stopBits, int parityBits, int flowControl) {
+        this.operation = operation;
         this.portName = portName;
         this.baudRate = baudRate;
         this.dataBits = dataBits;
@@ -149,7 +170,7 @@ public class SerialPortUtil implements SerialPortEventListener {
             System.out.println("> x Failed to find usable serial port.");
             return false;
         }
-        System.out.println("> √ Scan ports");
+        System.out.println("> √ Scan ports.");
         return true;
     }
 
@@ -194,17 +215,32 @@ public class SerialPortUtil implements SerialPortEventListener {
         }
         // 给端口添加监听器
         try {
+            // 给端口添加监听器
             serialPort.addEventListener(this);
+            // 设置当有效数据到达时唤醒监听接收线程
             serialPort.notifyOnDataAvailable(true);
+            // 设置当通信中断时唤醒中断线程
             serialPort.notifyOnBreakInterrupt(true);
         } catch (TooManyListenersException e) {
             System.out.println("> x Failed to add listener.");
             e.printStackTrace();
-            return false;
         }
-        // Enabled
-        serialPort.notifyOnDataAvailable(true);
+        System.out.println("> √ Open port.");
         return true;
+    }
+
+    public void addListener(SerialPort serialPort, SerialPortEventListener listener){
+        try {
+            // 给端口添加监听器
+            serialPort.addEventListener(listener);
+            // 设置当有效数据到达时唤醒监听接收线程
+            serialPort.notifyOnDataAvailable(true);
+            // 设置当通信中断时唤醒中断线程
+            serialPort.notifyOnBreakInterrupt(true);
+        } catch (TooManyListenersException e) {
+            System.out.println("> x Failed to add listener.");
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -223,6 +259,7 @@ public class SerialPortUtil implements SerialPortEventListener {
                 e.printStackTrace();
             }
         }
+        System.out.println("> Send data : " + message);
     }
 
     /**
@@ -281,15 +318,7 @@ public class SerialPortUtil implements SerialPortEventListener {
             System.out.println("> x Failed to close.");
             e.printStackTrace();
         }
-    }
-
-    /**
-     * 获取已发送数据量
-     *
-     * @return
-     */
-    public int getSendCount() {
-        return sendCount;
+        System.out.println("> √ Close workflow.");
     }
 
     /**
