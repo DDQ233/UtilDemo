@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.TooManyListenersException;
 
 /**
- * @Description TO-DO
+ * @Description Serial Port Util 串口工具类
  * @Author DDQ
  * @Date 2020/6/1 18:09
  */
@@ -89,6 +89,7 @@ public class SerialPortUtil implements SerialPortEventListener {
 
     /**
      * 获取端口列表
+     *
      * @return
      */
     public List<String> getPortList() {
@@ -113,15 +114,16 @@ public class SerialPortUtil implements SerialPortEventListener {
 
     /**
      * 构造的同时完成所有参数的绑定
-     * @param operation
-     * @param portName
-     * @param baudRate
-     * @param dataBits
-     * @param stopBits
-     * @param parityBits
-     * @param flowControl
+     *
+     * @param operation   用户自定义操作对象
+     * @param portName    端口名称
+     * @param baudRate    波特率
+     * @param dataBits    数据位
+     * @param stopBits    停止位
+     * @param parityBits  奇偶检验位
+     * @param flowControl 流控
      */
-    public SerialPortUtil(Operation operation, @NotNull String portName, int baudRate, int dataBits, int stopBits, int parityBits, int flowControl){
+    public SerialPortUtil(Operation operation, @NotNull String portName, int baudRate, int dataBits, int stopBits, int parityBits, int flowControl) {
         this.operation = operation;
         this.portName = portName;
         this.baudRate = baudRate;
@@ -134,11 +136,13 @@ public class SerialPortUtil implements SerialPortEventListener {
     /**
      * 绑定连接串口的参数
      *
-     * @param portName
-     * @param baudRate
-     * @param dataBits
-     * @param stopBits
-     * @param parityBits
+     * @param operation   用户自定义操作对象
+     * @param portName    端口名称
+     * @param baudRate    波特率
+     * @param dataBits    数据位
+     * @param stopBits    停止位
+     * @param parityBits  奇偶检验位
+     * @param flowControl 流控
      */
     public void bindOptions(Operation operation, @NotNull String portName, int baudRate, int dataBits, int stopBits, int parityBits, int flowControl) {
         this.operation = operation;
@@ -229,7 +233,7 @@ public class SerialPortUtil implements SerialPortEventListener {
         return true;
     }
 
-    public void addListener(SerialPort serialPort, SerialPortEventListener listener){
+    public void addListener(SerialPort serialPort, SerialPortEventListener listener) {
         try {
             // 给端口添加监听器
             serialPort.addEventListener(listener);
