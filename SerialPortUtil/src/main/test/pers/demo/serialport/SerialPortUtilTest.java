@@ -1,7 +1,7 @@
 package pers.demo.serialport;
 
 /**
- * @Description TO-Do
+ * @Description 测试类
  * @Author DDQ
  * @Date 2020/6/4 10:50
  */
